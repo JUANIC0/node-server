@@ -1,82 +1,38 @@
-const readline = require('readline-sync');
+const fs = require('fs');
+const { addTask, deleteTask, completeTask } = require('./taskManager');
 
-let tasks = [];
+// Crear una nueva tarea y agregarla
+const newTask = {
+  description: 'Buy groceries',
+  completed: false
+};
 
-function addTask() {
-  const indicator = readline.question('Ingrese el indicador de la tarea: ');
-  const description = readline.question('Ingrese la descripción de la tarea: ');
-
-  tasks.push({
-    indicator,
-    description,
-    completed: false,
+addTask(newTask)
+  .then(result => {
+    console.log(result); // Debería imprimir "Task added successfully!"
+  })
+  .catch(error => {
+    console.error(error);
   });
 
-  console.log('Tarea agregada con éxito.');
-}
+// Eliminar una tarea por índice
+const taskIndexToDelete = 0; // Por ejemplo, eliminar la primera tarea
 
-function removeTask() {
-  const index = readline.questionInt('Ingrese el número de la tarea que desea eliminar: ');
-
-  if (index >= 0 && index < tasks.length) {
-    tasks.splice(index, 1);
-    console.log('Tarea eliminada con éxito.');
-  } else {
-    console.log('Número de tarea inválido.');
-  }
-}
-
-function completeTask() {
-  const index = readline.questionInt('Ingrese el número de la tarea que desea marcar como completada: ');
-
-  if (index >= 0 && index < tasks.length) {
-    tasks[index].completed = true;
-    console.log('Tarea completada con éxito.');
-  } else {
-    console.log('Número de tarea inválido.');
-  }
-}
-
-function printTasks() {
-  console.log('=== Lista de Tareas ===');
-  tasks.forEach((task, index) => {
-    const status = task.completed ? 'Completada' : 'No completada';
-    console.log(`${index}. [${status}] ${task.indicator}: ${task.description}`);
+deleteTask(taskIndexToDelete)
+  .then(result => {
+    console.log(result); // Debería imprimir "Task deleted successfully!"
+  })
+  .catch(error => {
+    console.error(error);
   });
-  console.log('======================');
-}
 
-function main() {
-  while (true) {
-    console.log('\nSeleccione una opción:');
-    console.log('1. Agregar tarea');
-    console.log('2. Eliminar tarea');
-    console.log('3. Marcar tarea como completada');
-    console.log('4. Mostrar tareas');
-    console.log('5. Salir');
+// Marcar una tarea como completada por índice
+const taskIndexToComplete = 1; // Por ejemplo, marcar la segunda tarea como completada
 
-    const option = readline.questionInt('Opción: ');
-
-    switch (option) {
-      case 1:
-        addTask();
-        break;
-      case 2:
-        removeTask();
-        break;
-      case 3:
-        completeTask();
-        break;
-      case 4:
-        printTasks();
-        break;
-      case 5:
-        console.log('Saliendo...');
-        return;
-      default:
-        console.log('Opción inválida.');
-    }
-  }
-}
-
-main();
+completeTask(taskIndexToComplete)
+  .then(result => {
+    console.log(result); // Debería imprimir "Task marked as completed!"
+  })
+  .catch(error => {
+    console.error(error);
+  });
